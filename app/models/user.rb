@@ -6,4 +6,6 @@ class User < ApplicationRecord
             :lockable, :timeoutable #, :trackable,:confirmable
 
     include DeviseTokenAuth::Concerns::User
+
+    has_one :card 
 end

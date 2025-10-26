@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @subtopic %>
+
+<div>
+  <%= link_to "Edit this subtopic", edit_subtopic_path(@subtopic) %> |
+  <%= link_to "Back to subtopics", subtopics_path %>
+
+  <%= button_to "Destroy this subtopic", @subtopic, method: :delete %>
+</div>

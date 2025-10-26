@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Subtopics</h1>
+
+<div id="subtopics">
+  <% @subtopics.each do |subtopic| %>
+    <%= render subtopic %>
+    <p>
+      <%= link_to "Show this subtopic", subtopic %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New subtopic", new_subtopic_path %>

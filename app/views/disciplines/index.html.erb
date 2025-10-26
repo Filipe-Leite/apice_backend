@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Disciplines</h1>
+
+<div id="disciplines">
+  <% @disciplines.each do |discipline| %>
+    <%= render discipline %>
+    <p>
+      <%= link_to "Show this discipline", discipline %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New discipline", new_discipline_path %>

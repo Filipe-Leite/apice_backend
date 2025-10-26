@@ -29,3 +29,4 @@ end
 
 gem 'devise_token_auth'
 gem 'rack-cors'
+gem 'will_paginate', '~> 3.3'
