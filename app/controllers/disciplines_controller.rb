@@ -3,8 +3,9 @@ class DisciplinesController < ApplicationController
 
   def index
 
+    @disciplines = Discipline.all.paginate(page: params[:page], per_page: 10)
 
-    @disciplines = Discipline.all
+    render json: @disciplines, status: :ok
   end
 
   def show

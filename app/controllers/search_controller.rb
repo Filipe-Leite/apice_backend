@@ -3,14 +3,6 @@ class SearchController < ApplicationController
 
   def index
 
-
-    p "index >>>>>>>>>"
-    p "index >>>>>>>>>"
-    p "index >>>>>>>>>"
-    p "index >>>>>>>>>"
-    p "index >>>>>>>>>"
-    p "index >>>>>>>>>"
-
     if params[:queryType] == 'discipline'
       @results = search_records(params[:queryType], params[:q], params[:page])
 
@@ -73,7 +65,7 @@ class SearchController < ApplicationController
   def search_discipline(query, page)
     lower_query = query.downcase
     disciplines_found = Discipline.where("LOWER(disciplines.name) LIKE :query", query: lower_query)
-                    .paginate(page: page, per_page: 10)
+                                  .paginate(page: page, per_page: 10)
 
     disciplines_found
 
