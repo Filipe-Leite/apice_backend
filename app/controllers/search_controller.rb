@@ -4,7 +4,7 @@ class SearchController < ApplicationController
   def index
 
     if params[:queryType] == 'discipline'
-      @results = search_records(params[:queryType], params[:q], params[:page])
+      @results = search_records(params[:queryType], params[:q], params[:page], params[:letter])
 
       render json: @results, status: :ok
 
@@ -42,13 +42,15 @@ class SearchController < ApplicationController
 
   private
 
-  def search_records(type, query, page)
-    query = "%#{query}%"
+  def search_records(type, query, page, letter)
+    query = "#{query&.strip}%"
+
+    letter = letter&.strip
     page = page.to_i
 
     case type
     when 'discipline'
-      search_discipline(query, page)
+      search_disciplines(query, page, letter)
     when 'topic'
       search_topic(query, page)
     when 'subtopic'
@@ -62,13 +64,19 @@ class SearchController < ApplicationController
     end
   end
 
-  def search_discipline(query, page)
-    lower_query = query.downcase
-    disciplines_found = Discipline.where("LOWER(disciplines.name) LIKE :query", query: lower_query)
-                                  .paginate(page: page, per_page: 10)
+  def search_disciplines(query, page, letter)
+    disciplines = Discipline.all
+    
+    if letter.present?
+      disciplines = disciplines.where("LOWER(name) ILIKE ?", "#{letter.downcase}%")
+    end
 
-    disciplines_found
-
+    if query.present?
+      lower_query = query.downcase
+      disciplines = disciplines.where("LOWER(name) LIKE ?", "%#{lower_query}%")
+    end
+    
+    disciplines.paginate(page: page, per_page: 10)
   end
 
   def search_topic(query, page)

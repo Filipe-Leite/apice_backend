@@ -12,5 +12,5 @@ Rails.application.routes.draw do
 
   get '/search/:queryType/page/:page',                                     to: 'search#index'
   
-  get '/disciplines/page/:page',                                     to: 'disciplines#index'
+  get '/disciplines/page/:page',                                     to: 'disciplines#show'
 end

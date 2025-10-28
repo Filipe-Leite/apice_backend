@@ -1,5 +1,4 @@
 class DisciplinesController < ApplicationController
-  before_action :set_discipline, only: %i[ show edit update destroy ]
 
   def index
 
@@ -9,7 +8,18 @@ class DisciplinesController < ApplicationController
   end
 
   def show
+
+    @disciplines = Discipline.all
     
+    if params[:letter].present?
+      @disciplines = @disciplines.where(
+        Discipline.arel_table[:name].matches("#{params[:letter]}%")
+      )
+    end
+    
+    @disciplines = @disciplines.paginate(page: params[:page], per_page: 10)
+
+    render json: @disciplines, status: :ok
   end
 
   def new
