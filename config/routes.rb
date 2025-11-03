@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   resources :topics_disciplines
   resources :resources
   resources :subtopics
-  resources :topics
   resources :authors
   resources :cards
   mount_devise_token_auth_for 'User', at: 'auth'
@@ -13,4 +12,5 @@ Rails.application.routes.draw do
   get '/search/:queryType/page/:page',                                     to: 'search#index'
   
   get '/disciplines/page/:page',                                     to: 'disciplines#show'
+  get '/topics/page/:page',                                     to: 'topics#show'
 end

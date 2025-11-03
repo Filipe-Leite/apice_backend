@@ -4,19 +4,16 @@ class SearchController < ApplicationController
   def index
 
     if params[:queryType] == 'discipline'
+
       @results = search_records(params[:queryType], params[:q], params[:page], params[:letter])
 
       render json: @results, status: :ok
 
-    elsif params[:queryType] == 'groups'
+    elsif params[:queryType] == 'topic'
+
       @results = search_records(params[:queryType], params[:q], params[:page])
 
-        render json: @results.as_json(include: 
-                                      { creator:  { include: { user_more_info: { methods: :avatar_url } } },
-                                        group_musical_genres: { include: { 
-                                                                          music_genre: {}
-                                      }}}, 
-                                      user: { include: { user_more_info: { methods: :avatar_url } } } ), status: :ok
+      render json: @results, status: :ok
       
     elsif params[:queryType] == 'projects'
       @results = search_records(params[:queryType], params[:q], params[:page])

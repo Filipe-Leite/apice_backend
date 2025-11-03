@@ -5,76 +5,35 @@ namespace :db do
       puts "Iniciando população dos tópicos..."
       
       topics = [
-        # Tópicos começando com A (aumentados)
-        "Álgebra Abstrata",
-        "Álgebra Linear",
-        "Algoritmos Avançados",
-        "Análise Complexa",
-        "Análise Numérica",
-        "Análise Real",
-        "Anatomia Animal",
-        "Anatomia Humana",
-        "Antropologia Biológica",
-        "Antropologia Cultural",
-        "Antropologia Social",
-        "Arqueologia Pré-Histórica",
-        "Arquitetura Sustentável",
-        "Arte Abstrata",
-        "Arte Africana",
-        "Arte Antiga",
-        "Arte Asiática",
-        "Arte Barroca",
-        "Arte Contemporânea",
-        "Arte Digital",
-        "Arte Egípcia",
-        "Arte Grega",
-        "Arte Medieval",
-        "Arte Renascentista",
-        "Arte Rupestre",
-        "Astrobiologia",
-        "Astrodinâmica",
-        "Astrofísica Estelar",
-        "Astronomia Amadora",
-        "Astronomia Observacional",
-        "Astronomia Planetária",
-        "Auditoria Administrativa",
-        "Auditoria Financeira",
-        
-        # Ciências Exatas e Tecnologia (mantidos)
         "Cálculo Diferencial e Integral",
         "Programação Orientada a Objetos",
         "Estruturas de Dados",
         "Algoritmos e Complexidade",
         "Mecânica Quântica",
         "Termodinâmica",
+        "Álgebra Linear",
         "Estatística Aplicada",
-        
-        # Ciências Humanas e Sociais (mantidos)
         "Filosofia Antiga",
         "Psicologia Cognitiva",
         "Sociologia Urbana",
         "Economia Comportamental",
+        "Antropologia Cultural",
         "História do Brasil",
         "Geografia Humana",
         "Teorias da Comunicação",
-        
-        # Ciências Biológicas e Saúde (mantidos)
         "Genética Molecular",
         "Fisiologia Humana",
         "Ecologia de Ecossistemas",
         "Imunologia Básica",
+        "Anatomia Humana",
         "Bioquímica Metabólica",
         "Microbiologia Geral",
-        
-        # Engenharias (mantidos)
         "Resistência dos Materiais",
         "Circuitos Elétricos",
         "Controle e Automação",
         "Mecânica dos Fluidos",
         "Sistemas Digitais",
         "Gestão de Projetos",
-        
-        # Artes e Comunicação (mantidos)
         "Teoria das Cores",
         "História da Arte Contemporânea",
         "Comunicação Digital",
@@ -96,16 +55,6 @@ namespace :db do
       end
 
       puts "População concluída! Tópicos criados: #{topics_created}, total: #{Topic.count}"
-      
-      # Estatísticas por letra
-      puts "\n--- Estatísticas por letra inicial ---"
-      ('A'..'Z').each do |letter|
-        count = Topic.where("name ILIKE ?", "#{letter}%").count
-        puts "Letra #{letter}: #{count} tópicos" if count > 0
-      end
-      
-      total_a = Topic.where("name ILIKE ?", "A%").count
-      puts "\nTotal de tópicos começando com 'A': #{total_a}"
     end
 
     desc "Limpa todos os tópicos (cuidado!)"
