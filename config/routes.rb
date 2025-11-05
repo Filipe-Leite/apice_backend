@@ -9,9 +9,11 @@ Rails.application.routes.draw do
   
   mount_devise_token_auth_for 'User', at: 'auth'
 
-  get '/search/:queryType/page/:page',                                     to: 'search#index'
+  get '/search/:queryType/page/:page',                           to: 'search#index'
   
-  get '/disciplines/page/:page',                                     to: 'disciplines#show'
-  get '/topics/page/:page',                                     to: 'topics#show'
-  get '/subtopics/page/:page',                                     to: 'subtopics#show'
+  get '/disciplines/page/:page',                                 to: 'disciplines#show'
+  get '/topics/page/:page',                                      to: 'topics#show'
+  get '/subtopics/page/:page',                                   to: 'subtopics#show'
+  get '/authors/page/:page',                                     to: 'authors#show'
+  get '/sources/page/:page',                                     to: 'sources#show'
 end

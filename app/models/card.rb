@@ -1,4 +1,4 @@
 class Card < ApplicationRecord
     belongs_to :user
-    belongs_to :resource
+    belongs_to :source
 end

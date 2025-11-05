@@ -16,40 +16,23 @@ class SearchController < ApplicationController
       render json: @results, status: :ok
       
     elsif params[:queryType] == 'subtopic'
-      @results = search_records(params[:queryType], params[:q], params[:page], params[:letter])
-      
-      results =  @results.map do |project|
-          {
-            project: project,
-            master_files: project.files_signed_urls_project
-          }
-      end
-    elsif params[:queryType] == 'author'
-      @results = search_records(params[:queryType], params[:q], params[:page], params[:letter])
-      
-      results =  @results.map do |project|
-          {
-            project: project,
-            master_files: project.files_signed_urls_project
-          }
-      end
-    elsif params[:queryType] == 'source'
-      @results = search_records(params[:queryType], params[:q], params[:page], params[:letter])
-      
-      results =  @results.map do |project|
-          {
-            project: project,
-            master_files: project.files_signed_urls_project
-          }
-      end
 
-      render json: {
-                    results: results
-                   }, include: { user: {
-                                only: [ :id, :nickname],
-                                include: {
-                                  user_more_info: {}
-                                }} }, status: :ok
+      @results = search_records(params[:queryType], params[:q], params[:page], params[:letter])
+
+      render json: @results, status: :ok
+
+    elsif params[:queryType] == 'author'
+      
+      @results = search_records(params[:queryType], params[:q], params[:page], params[:letter])
+
+      render json: @results, status: :ok
+
+    elsif params[:queryType] == 'source'
+      
+      @results = search_records(params[:queryType], params[:q], params[:page], params[:letter])
+
+      render json: @results, status: :ok
+
     else
       render json: { errors: @results.errors.full_messages }, status: :unprocessable_entity
     end
@@ -109,102 +92,49 @@ class SearchController < ApplicationController
     topics.paginate(page: page, per_page: 10)
   end
 
-  def search_subtopic(query, page)
+  def search_subtopic(query, page, letter)
 
-    lower_query = "#{query.strip.downcase}"
+    subtopics = Subtopic.all
+    
+    if letter.present?
+      subtopics = subtopics.where("LOWER(name) ILIKE ?", "#{letter.downcase}%")
+    end
 
-    @Projects = Project.joins(user: :user_more_info)
-                      .joins(user: { user_musical_genres: :music_genre })
-                      .where(
-                        "LOWER(users.nickname) LIKE :query OR 
-                        LOWER(user_more_infos.name) LIKE :query OR
-                        LOWER(user_more_infos.last_name) LIKE :query OR
-                        LOWER(user_more_infos.nickname) LIKE :query OR
-                        LOWER(user_more_infos.email) LIKE :query OR
-                        LOWER(user_more_infos.phone_number) LIKE :query OR
-                        LOWER(user_more_infos.website) LIKE :query OR
-                        LOWER(user_more_infos.city) LIKE :query OR
-                        LOWER(user_more_infos.state) LIKE :query OR
-                        LOWER(user_more_infos.country) LIKE :query OR
-                        LOWER(user_more_infos.about) LIKE :query OR
-                        LOWER(projects.title) LIKE :query OR 
-                        LOWER(projects.description) LIKE :query OR
-                        LOWER(music_genres.description) LIKE :query",
-                        query: "%#{lower_query.downcase}%"
-                      )
-                      .distinct
-                      .paginate(page: page, per_page: 10)
-
-    route_user_as_contributor = @Projects.joins(:contributors)
-                                         .where('projects.user_id = ? AND 
-                                                   contributors.user_id = ? OR 
-                                                   projects.privacity = ?',
-                                                   current_user.id,current_user.id, 0)
+    if query.present?
+      lower_query = query.downcase
+      subtopics = subtopics.where("LOWER(name) LIKE ?", "%#{lower_query}%")
+    end
+    
+    subtopics.paginate(page: page, per_page: 10)
   end
   
-  def search_author(query, page)
+  def search_author(query, page, letter)
+    authors = Author.all
+    
+    if letter.present?
+      authors = authors.where("LOWER(name) ILIKE ?", "#{letter.downcase}%")
+    end
 
-    lower_query = "#{query.strip.downcase}"
-
-    @Projects = Project.joins(user: :user_more_info)
-                      .joins(user: { user_musical_genres: :music_genre })
-                      .where(
-                        "LOWER(users.nickname) LIKE :query OR 
-                        LOWER(user_more_infos.name) LIKE :query OR
-                        LOWER(user_more_infos.last_name) LIKE :query OR
-                        LOWER(user_more_infos.nickname) LIKE :query OR
-                        LOWER(user_more_infos.email) LIKE :query OR
-                        LOWER(user_more_infos.phone_number) LIKE :query OR
-                        LOWER(user_more_infos.website) LIKE :query OR
-                        LOWER(user_more_infos.city) LIKE :query OR
-                        LOWER(user_more_infos.state) LIKE :query OR
-                        LOWER(user_more_infos.country) LIKE :query OR
-                        LOWER(user_more_infos.about) LIKE :query OR
-                        LOWER(projects.title) LIKE :query OR 
-                        LOWER(projects.description) LIKE :query OR
-                        LOWER(music_genres.description) LIKE :query",
-                        query: "%#{lower_query.downcase}%"
-                      )
-                      .distinct
-                      .paginate(page: page, per_page: 10)
-
-    route_user_as_contributor = @Projects.joins(:contributors)
-                                         .where('projects.user_id = ? AND 
-                                                   contributors.user_id = ? OR 
-                                                   projects.privacity = ?',
-                                                   current_user.id,current_user.id, 0)
+    if query.present?
+      lower_query = query.downcase
+      authors = authors.where("LOWER(name) LIKE ?", "%#{lower_query}%")
+    end
+    
+    authors.paginate(page: page, per_page: 10)
   end
 
-  def search_source(query, page)
+  def search_source(query, page, letter)
+    sources = Source.all
+    
+    if letter.present?
+      sources = sources.where("LOWER(title) ILIKE ?", "#{letter.downcase}%")
+    end
 
-    lower_query = "#{query.strip.downcase}"
-
-    @Projects = Project.joins(user: :user_more_info)
-                      .joins(user: { user_musical_genres: :music_genre })
-                      .where(
-                        "LOWER(users.nickname) LIKE :query OR 
-                        LOWER(user_more_infos.name) LIKE :query OR
-                        LOWER(user_more_infos.last_name) LIKE :query OR
-                        LOWER(user_more_infos.nickname) LIKE :query OR
-                        LOWER(user_more_infos.email) LIKE :query OR
-                        LOWER(user_more_infos.phone_number) LIKE :query OR
-                        LOWER(user_more_infos.website) LIKE :query OR
-                        LOWER(user_more_infos.city) LIKE :query OR
-                        LOWER(user_more_infos.state) LIKE :query OR
-                        LOWER(user_more_infos.country) LIKE :query OR
-                        LOWER(user_more_infos.about) LIKE :query OR
-                        LOWER(projects.title) LIKE :query OR 
-                        LOWER(projects.description) LIKE :query OR
-                        LOWER(music_genres.description) LIKE :query",
-                        query: "%#{lower_query.downcase}%"
-                      )
-                      .distinct
-                      .paginate(page: page, per_page: 10)
-
-    route_user_as_contributor = @Projects.joins(:contributors)
-                                         .where('projects.user_id = ? AND 
-                                                   contributors.user_id = ? OR 
-                                                   projects.privacity = ?',
-                                                   current_user.id,current_user.id, 0)
+    if query.present?
+      lower_query = query.downcase
+      sources = sources.where("LOWER(title) LIKE ?", "%#{lower_query}%")
+    end
+    
+    sources.paginate(page: page, per_page: 10)
   end
 end

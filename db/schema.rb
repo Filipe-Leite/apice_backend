@@ -10,15 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_08_220603) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_05_150656) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "authors", force: :cascade do |t|
-    t.string "first_name"
-    t.string "surname"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "reference"
   end
 
   create_table "cards", force: :cascade do |t|
@@ -55,7 +55,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_08_220603) do
     t.index ["discipline_id"], name: "index_disciplines_authors_on_discipline_id"
   end
 
-  create_table "resources", force: :cascade do |t|
+  create_table "sources", force: :cascade do |t|
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -139,7 +139,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_08_220603) do
   end
 
   add_foreign_key "cards", "authors"
-  add_foreign_key "cards", "resources"
+  add_foreign_key "cards", "sources", column: "resource_id"
   add_foreign_key "cards", "users"
   add_foreign_key "disciplines_authors", "authors"
   add_foreign_key "disciplines_authors", "disciplines"

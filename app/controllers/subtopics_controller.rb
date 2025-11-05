@@ -16,7 +16,6 @@ class SubtopicsController < ApplicationController
 
   private
 
-
     def subtopic_params
       params.require(:subtopic).permit(:name)
     end
