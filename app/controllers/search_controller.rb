@@ -11,12 +11,30 @@ class SearchController < ApplicationController
 
     elsif params[:queryType] == 'topic'
 
-      @results = search_records(params[:queryType], params[:q], params[:page])
+      @results = search_records(params[:queryType], params[:q], params[:page], params[:letter])
 
       render json: @results, status: :ok
       
-    elsif params[:queryType] == 'projects'
-      @results = search_records(params[:queryType], params[:q], params[:page])
+    elsif params[:queryType] == 'subtopic'
+      @results = search_records(params[:queryType], params[:q], params[:page], params[:letter])
+      
+      results =  @results.map do |project|
+          {
+            project: project,
+            master_files: project.files_signed_urls_project
+          }
+      end
+    elsif params[:queryType] == 'author'
+      @results = search_records(params[:queryType], params[:q], params[:page], params[:letter])
+      
+      results =  @results.map do |project|
+          {
+            project: project,
+            master_files: project.files_signed_urls_project
+          }
+      end
+    elsif params[:queryType] == 'source'
+      @results = search_records(params[:queryType], params[:q], params[:page], params[:letter])
       
       results =  @results.map do |project|
           {
@@ -49,13 +67,13 @@ class SearchController < ApplicationController
     when 'discipline'
       search_disciplines(query, page, letter)
     when 'topic'
-      search_topic(query, page)
+      search_topic(query, page, letter)
     when 'subtopic'
-      search_subtopic(query, page)
+      search_subtopic(query, page, letter)
     when 'author'
-      search_author(query, page)
+      search_author(query, page, letter)
     when 'source'
-      search_source(query, page)
+      search_source(query, page, letter)
     else
       []
     end
@@ -76,14 +94,19 @@ class SearchController < ApplicationController
     disciplines.paginate(page: page, per_page: 10)
   end
 
-  def search_topic(query, page)
-    lower_query = "#{query.downcase}"
+  def search_topic(query, page, letter)
+    topics = Topic.all
     
-    topic_found = Topic.where("LOWER(groups.name) LIKE :query", 
-                                query: lower_query)
-                        .paginate(page: page, per_page: 10)
+    if letter.present?
+      topics = topics.where("LOWER(name) ILIKE ?", "#{letter.downcase}%")
+    end
+
+    if query.present?
+      lower_query = query.downcase
+      topics = topics.where("LOWER(name) LIKE ?", "%#{lower_query}%")
+    end
     
-    topic_found
+    topics.paginate(page: page, per_page: 10)
   end
 
   def search_subtopic(query, page)
