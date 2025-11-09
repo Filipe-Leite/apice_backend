@@ -3,24 +3,12 @@ class TopicsController < ApplicationController
   def show
 
     @topics = Topic.all
-
-    p "afafadf >>>>>>>> #{params}"
-    p "afafadf >>>>>>>> #{params}"
-    p "afafadf >>>>>>>> #{params}"
-    p "afafadf >>>>>>>> #{params}"
-    p "afafadf >>>>>>>> #{params}"
-    p "afafadf >>>>>>>> #{params}"
-    p "afafadf >>>>>>>> #{params}"
-    p "afafadf >>>>>>>> #{params}"
-    p "afafadf >>>>>>>> #{params}"
-    p "afafadf >>>>>>>> #{params}"
-    p "afafadf >>>>>>>> #{params}"
     
     if params[:discipline].present? 
       @topics = @topics.joins(:topics_disciplines).where(topics_disciplines: { discipline_id: params[:discipline] })
     end
 
-    if params[:letter].present? && params[:discipline].blank
+    if params[:letter].present? && params[:discipline].blank?
       @topics = @topics.where(
         Topic.arel_table[:name].matches("#{params[:letter]}%")
       )
