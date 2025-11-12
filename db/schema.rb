@@ -10,19 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_05_150656) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_12_034122) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "authors", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "name"
     t.string "reference"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "cards", force: :cascade do |t|
-    t.string "subject"
     t.string "quote"
     t.string "comment"
     t.string "edition"
@@ -31,13 +30,35 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_05_150656) do
     t.date "internet_access_date"
     t.string "internet_access_link"
     t.bigint "user_id", null: false
-    t.bigint "resource_id", null: false
+    t.bigint "source_id", null: false
     t.bigint "author_id", null: false
+    t.bigint "subtopic_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_cards_on_author_id"
-    t.index ["resource_id"], name: "index_cards_on_resource_id"
+    t.index ["source_id"], name: "index_cards_on_source_id"
+    t.index ["subtopic_id"], name: "index_cards_on_subtopic_id"
     t.index ["user_id"], name: "index_cards_on_user_id"
+  end
+
+  create_table "current_cards", force: :cascade do |t|
+    t.string "quote"
+    t.string "comment"
+    t.string "edition"
+    t.string "city"
+    t.date "year"
+    t.date "internet_access_date"
+    t.string "internet_access_link"
+    t.bigint "user_id", null: false
+    t.bigint "source_id"
+    t.bigint "author_id"
+    t.bigint "subtopic_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_current_cards_on_author_id"
+    t.index ["source_id"], name: "index_current_cards_on_source_id"
+    t.index ["subtopic_id"], name: "index_current_cards_on_subtopic_id"
+    t.index ["user_id"], name: "index_current_cards_on_user_id"
   end
 
   create_table "disciplines", force: :cascade do |t|
@@ -139,8 +160,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_05_150656) do
   end
 
   add_foreign_key "cards", "authors"
-  add_foreign_key "cards", "sources", column: "resource_id"
+  add_foreign_key "cards", "sources"
+  add_foreign_key "cards", "subtopics"
   add_foreign_key "cards", "users"
+  add_foreign_key "current_cards", "authors"
+  add_foreign_key "current_cards", "sources"
+  add_foreign_key "current_cards", "subtopics"
+  add_foreign_key "current_cards", "users"
   add_foreign_key "disciplines_authors", "authors"
   add_foreign_key "disciplines_authors", "disciplines"
   add_foreign_key "starred_cards", "cards"

@@ -1,0 +1,10 @@
+<h1>Editing current card</h1>
+
+<%= render "form", current_card: @current_card %>
+
+<br>
+
+<div>
+  <%= link_to "Show this current card", @current_card %> |
+  <%= link_to "Back to current cards", current_cards_path %>
+</div>

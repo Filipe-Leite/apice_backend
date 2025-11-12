@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :current_cards
   resources :subtopics_topics
   resources :topics_authors
   resources :disciplines_authors
@@ -16,4 +17,6 @@ Rails.application.routes.draw do
   get '/subtopics/page/:page',                                   to: 'subtopics#show'
   get '/authors/page/:page',                                     to: 'authors#show'
   get '/sources/page/:page',                                     to: 'sources#show'
+
+  post '/current_cards',                                           to: 'current_cards#create'
 end

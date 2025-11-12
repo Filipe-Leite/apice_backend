@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Current cards</h1>
+
+<div id="current_cards">
+  <% @current_cards.each do |current_card| %>
+    <%= render current_card %>
+    <p>
+      <%= link_to "Show this current card", current_card %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New current card", new_current_card_path %>

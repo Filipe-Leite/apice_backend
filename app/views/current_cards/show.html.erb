@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @current_card %>
+
+<div>
+  <%= link_to "Edit this current card", edit_current_card_path(@current_card) %> |
+  <%= link_to "Back to current cards", current_cards_path %>
+
+  <%= button_to "Destroy this current card", @current_card, method: :delete %>
+</div>
