@@ -42,6 +42,17 @@ class CurrentCardsController < ApplicationController
     end
 
     def current_card_params
-      params.require(:current_card).permit(:quote, :comment, :edition, :city, :year, :internet_access_date, :internet_access_link, :user_id, :source_id, :author_id, :subtopic_id)
+      params.require(:current_card).permit(:quote, 
+                                           :comment, 
+                                           :edition, 
+                                           :city, 
+                                           :year, 
+                                           :internet_access_date, 
+                                           :internet_access_link, 
+                                           :user_id, 
+                                           :source_id, 
+                                           :author_id, 
+                                           :subtopic_id,
+                                           :card_type_id)
     end
 end
