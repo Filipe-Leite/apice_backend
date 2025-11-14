@@ -19,4 +19,5 @@ Rails.application.routes.draw do
   get '/sources/page/:page',                                     to: 'sources#show'
 
   post '/current_cards',                                           to: 'current_cards#create'
+  get 'user/:user_id/current_cards',                                           to: 'current_cards#get_user_current_cards'
 end

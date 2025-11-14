@@ -5,7 +5,12 @@ class CurrentCardsController < ApplicationController
   def index
     @current_cards = CurrentCard.all
   end
-  def show
+
+  def get_user_current_cards
+
+    @user_current_cards = CurrentCard.all.where(user_id: params[:user_id])
+
+    render json: @user_current_cards, status: :ok  
   end
 
   def new
@@ -17,10 +22,16 @@ class CurrentCardsController < ApplicationController
 
   def create
 
+    p "current_card_params >>> #{current_card_params}"
+    p "current_card_params >>> #{current_card_params}"
+    p "current_card_params >>> #{current_card_params}"
+    p "current_card_params >>> #{current_card_params}"
+    p "current_card_params >>> #{current_card_params[:internet_access_date].class}"
+
     @current_card = CurrentCard.new(card_params = current_card_params.merge(user_id: current_user.id))
 
     if @current_card.save
-      render json: @current_card, status: :created
+      render json: @current_card.as_json(include: { subtopic: {} }), status: :created
     else
       render json: { errors: @current_card.errors.full_messages }, status: :unprocessable_entity
     end
