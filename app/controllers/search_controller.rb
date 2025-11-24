@@ -41,22 +41,27 @@ class SearchController < ApplicationController
   private
 
   def search_records(type, query, page, letter)
-    query = "#{query&.strip}%"
-
-    letter = letter&.strip
-    page = page.to_i
-
-    case type
-    when 'discipline'
-      search_disciplines(query, page, letter)
-    when 'topic'
-      search_topic(query, page, letter)
-    when 'subtopic'
-      search_subtopic(query, page, letter)
-    when 'author'
-      search_author(query, page, letter)
-    when 'source'
-      search_source(query, page, letter)
+    
+    if query != ""
+      query = "#{query&.strip}%"
+  
+      letter = letter&.strip
+      page = page.to_i
+  
+      case type
+      when 'discipline'
+        search_disciplines(query, page, letter)
+      when 'topic'
+        search_topic(query, page, letter)
+      when 'subtopic'
+        search_subtopic(query, page, letter)
+      when 'author'
+        search_author(query, page, letter)
+      when 'source'
+        search_source(query, page, letter)
+      else
+        []
+      end
     else
       []
     end
